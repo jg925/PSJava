@@ -1,6 +1,7 @@
 package com.pluralsight.calcengine;
 
 import java.util.Scanner;
+import java.lang.StringBuilder;
 
 public class Main {
   public static void main(String[] args) {
@@ -17,6 +18,8 @@ public class Main {
       for (double currentResult : results) {
         System.out.println(currentResult);
       }
+    } else if (args.length == 1 && args[0].equals("interactive")) {
+      executeInteractively();
     } else if (args.length == 3) {
       handleCommandLine(args);
     } else {
@@ -39,7 +42,35 @@ public class Main {
     double leftVal = valueFromWord(parts[1]);
     double rightVal = valueFromWord(parts[2]);
     double result = execute(opCode, leftVal, rightVal);
-    System.out.println(result);
+    displayResult(opCode, leftVal, rightVal, result);
+  }
+
+  private static void displayResult(char opCode, double leftVal, double rightVal, double result) {
+    char symbol = symbolFromOpCode(opCode);
+    StringBuilder builder = new StringBuilder(20);
+    builder.append(leftVal);
+    builder.append(" ");
+    builder.append(symbol);
+    builder.append(" ");
+    builder.append(rightVal);
+    builder.append(" = ");
+    builder.append(result);
+    String output = builder.toString();
+    System.out.println(output);
+  }
+
+  private static char symbolFromOpCode(char opCode) {
+    char[] opCodes = { 'a', 's', 'm', 'd' };
+    char[] symbols = { '+', '-', '*', '/' };
+    char symbol = ' ';
+    for (int index = 0; index < opCodes.length; index++) {
+      if (opCode == opCodes[index]) {
+        symbol = symbols[index];
+        break;
+      }
+    }
+
+    return symbol;
   }
 
   private static void handleCommandLine(String[] args) {
